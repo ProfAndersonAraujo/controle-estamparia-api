@@ -1,13 +1,11 @@
-
-import express from "express";
+import express, { Request, Response } from "express";
+import { produtoRoutes } from "./presentation/routes/produtoRoutes.js";
 
 const app = express();
 
-// Permite receber JSON nas requisições
 app.use(express.json());
 
-// Rota inicial
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
     res.status(200).json({
         mensagem: "API Controle de Estamparia",
         versao: "1.0.0",
@@ -15,12 +13,13 @@ app.get("/", (req, res) => {
     });
 });
 
-// Verificação de saúde da aplicação
-app.get("/health", (req, res) => {
+app.get("/health", (req: Request, res: Response) => {
     res.status(200).json({
         status: "healthy",
         timestamp: new Date().toISOString()
     });
 });
 
-export { app }; 
+app.use("/produtos", produtoRoutes);
+
+export { app };
