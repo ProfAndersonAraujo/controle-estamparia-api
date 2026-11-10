@@ -1,6 +1,7 @@
 
 import { describe, it, expect, vi } from "vitest";
-
+import type { ProdutoRepository } from "../../src/domain/interfaces/ProdutoRepository.js";
+import type { VendaRepository } from "../../src/domain/interfaces/VendaRepository.js";
 import { RegistrarVenda } from "../../src/application/use-cases/RegistrarVenda.js";
 import { Produto } from "../../src/domain/entities/Produto.js";
 import { DescontoPromocional } from "../../src/application/use-cases/estrategias/DescontoPromocional.js";
@@ -27,8 +28,8 @@ describe("Caso de uso RegistrarVenda", () => {
         };
 
         const casoDeUso = new RegistrarVenda(
-            produtoRepository as any,
-            vendaRepository as any,
+            produtoRepository as unknown as ProdutoRepository,
+            vendaRepository as unknown as VendaRepository ,
             new DescontoPromocional()
         );
 
@@ -67,8 +68,8 @@ describe("Caso de uso RegistrarVenda", () => {
         };
 
         const casoDeUso = new RegistrarVenda(
-            produtoRepository as any,
-            vendaRepository as any,
+            produtoRepository as unknown as ProdutoRepository,
+            vendaRepository as unknown as VendaRepository,
             new DescontoPromocional()
         );
 
@@ -98,8 +99,8 @@ describe("Caso de uso RegistrarVenda", () => {
         };
 
         const casoDeUso = new RegistrarVenda(
-            produtoRepository as any,
-            vendaRepository as any,
+            produtoRepository as unknown as ProdutoRepository,
+            vendaRepository as unknown as VendaRepository,
             new DescontoPromocional()
         );
 

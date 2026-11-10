@@ -1,9 +1,7 @@
-
-import type { EstrategiaDesconto } from "../../../domain/interfaces/EstrategiaDesconto.ts";
+import type { EstrategiaDesconto } from "../../../domain/interfaces/EstrategiaDesconto.js";
 
 export class SemDesconto implements EstrategiaDesconto {
-
-    calcular(subtotalCentavos: number): number {
+    calcular(): number {
         return 0;
     }
 }

@@ -22,6 +22,6 @@ describe("Estratégias de desconto", () => {
     });
 
     it("não deve aplicar desconto na estratégia sem desconto", () => {
-        expect(semDesconto.calcular(60000)).toBe(0);
+        expect(semDesconto.calcular()).toBe(0);
     });
 });

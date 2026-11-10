@@ -1,10 +1,11 @@
-
+import type { Express } from "express";
+import type { PrismaClient } from "@prisma/client";
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import request from "supertest";
 import "dotenv/config";
 
-let app: any;
-let prisma: any;
+let app: Express;
+let prisma: PrismaClient;
 let produtoId: number;
 
 const nomeProduto = `Produto teste ${Date.now()}`;
