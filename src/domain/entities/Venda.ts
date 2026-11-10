@@ -64,4 +64,22 @@ export class Venda {
             new Date()
         );
     }
+
+    static reconstituir(
+    id: number,
+    itens: ItemVenda[],
+    subtotalCentavos: number,
+    descontoCentavos: number,
+    totalCentavos: number,
+    data: Date
+): Venda {
+    return new Venda(
+        id,
+        itens,
+        subtotalCentavos,
+        descontoCentavos,
+        totalCentavos,
+        data
+    );
+}
 }
