@@ -21,5 +21,16 @@ export default tseslint.config(
         rules: {
             "@typescript-eslint/no-explicit-any": "off"
         }
+    },
+
+    {
+  files: ["load-tests/**/*.js"],
+  languageOptions: {
+    globals: {
+      __ENV: "readonly",
+      __VU: "readonly",
+      __ITER: "readonly"
+    }
+  }
     }
 );
