@@ -1,0 +1,234 @@
+openapi: 3.0.3
+
+info:
+  title: Controle de Estamparia API
+  description: API REST para gerenciamento de produtos, estoque e vendas.
+  version: 1.0.0
+  contact:
+    name: Equipe de desenvolvimento
+
+servers:
+  - url: http://localhost:3000
+    description: Ambiente local
+
+tags:
+  - name: Sistema
+    description: Verificação de disponibilidade da API
+
+  - name: Produtos
+    description: Operações de gerenciamento de produtos e estoque
+
+  - name: Vendas
+    description: Operações de registro e consulta de vendas
+
+  - name: Observabilidade
+    description: Métricas e monitoramento da aplicação
+
+paths:
+
+  /health:
+    get:
+      tags:
+        - Sistema
+      operationId: verificarSaude
+      summary: Verificar disponibilidade da API
+      description: Verifica se a aplicação está funcionando e disponível para receber requisições.
+      responses:
+          "200":
+            description: API funcionando
+
+      
+
+  /produtos:
+    post:
+      tags:
+        - Produtos
+      summary: Cadastrar produto
+      operationId: cadastrarProduto
+      description: Cadastra um novo produto no estoque da estamparia.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NovoProduto"
+      responses:
+        "201":
+          description: Produto cadastrado
+        "400":
+          description: Dados inválidos
+
+    get:
+      tags:
+        - Produtos
+      summary: Listar produtos
+      operationId: listarProdutos
+      description: Retorna a lista de produtos cadastrados.
+      responses:
+        "200":
+          description: Lista de produtos
+
+  /produtos/{id}:
+    get:
+      tags:
+        - Produtos
+      operationId: buscarProdutoPorId
+      summary: Buscar produto por ID
+      description: Retorna os dados de um produto específico utilizando seu identificador.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Produto encontrado
+        "404":
+          description: Produto não encontrado
+
+  /produtos/{id}/estoque:
+    patch:
+      tags:
+        - Produtos
+      summary: Movimentar estoque
+      operationId: movimentarEstoque
+      description: Registra uma entrada ou saída de estoque de um produto.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MovimentacaoEstoque"
+      responses:
+        "200":
+          description: Estoque atualizado
+        "400":
+          description: Movimentação inválida
+        "404":
+          description: Produto não encontrado
+
+  /vendas:
+    post:
+      tags:
+        - Vendas
+      summary: Registrar venda
+      operationId: registrarVenda
+      description: Registra uma venda e realiza a baixa correspondente no estoque.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NovaVenda"
+      responses:
+        "201":
+          description: Venda registrada
+        "400":
+          description: Dados inválidos ou estoque insuficiente
+
+    get:
+      tags:
+        - Vendas
+      summary: Listar vendas
+      operationId: listarVendas
+      description: Retorna as vendas registradas no sistema.
+      
+      responses:
+        "200":
+          description: Lista de vendas
+
+  /vendas/{id}:
+    get:
+      tags:
+        - Vendas
+      summary: Consultar venda por ID
+      operationId: consultarVendaPorId
+      description: Consulta os detalhes de uma venda pelo identificador.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Venda encontrada
+        "404":
+          description: Venda não encontrada
+
+  /metrics:
+    get:
+      summary: Consultar métricas da aplicação
+      tags:
+        - Observabilidade
+      operationId: consultarMetricas
+      description: Disponibiliza métricas da aplicação no formato Prometheus.
+      responses:
+        "200":
+          description: Métricas no formato Prometheus
+
+components:
+  schemas:
+
+    NovoProduto:
+      type: object
+      required:
+        - nome
+        - descricao
+        - precoCentavos
+        - quantidadeEstoque
+      properties:
+        nome:
+          type: string
+          example: Caneca personalizada
+        descricao:
+          type: string
+          example: Caneca de cerâmica personalizada
+        precoCentavos:
+          type: integer
+          example: 2990
+        quantidadeEstoque:
+          type: integer
+          example: 50
+
+    MovimentacaoEstoque:
+      type: object
+      required:
+        - quantidade
+        - tipo
+      properties:
+        quantidade:
+          type: integer
+          example: 10
+        tipo:
+          type: string
+          enum:
+            - entrada
+            - saida
+
+    NovaVenda:
+      type: object
+      required:
+        - itens
+      properties:
+        itens:
+          type: array
+          items:
+            type: object
+            required:
+              - produtoId
+              - quantidade
+            properties:
+              produtoId:
+                type: integer
+                example: 1
+              quantidade:
+                type: integer
+                example: 2
